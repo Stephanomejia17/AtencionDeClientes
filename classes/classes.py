@@ -2,6 +2,11 @@ class EmptyQueue (Exception):
     def __init__(self, message):
         self.message = message
 
+class UserNotFound(Exception):
+    def __init__(self, message):
+        self.message = message
+
+
 
 class Person:
     def __init__(self, name, age, descrip, plevel) -> None:
@@ -150,6 +155,45 @@ class PriorityQueue:
     def first(self):
         return self.queue.tail
 
+    def updatePriority(self, persona: Person, new_priority):
+        contador = 1
+        found = False
+        index_queue = self.queue.head
+        self.backupQueue.head = self.queue.head
+        self.backupQueue.tail = self.queue.tail
+
+        while True:
+            if index_queue.value is persona:
+                found = True
+                persona.plevel = new_priority
+                break
+            elif index_queue.next is None:
+                break
+            index_queue = index_queue.next
+
+        if found is True:
+            if index_queue.prev is not None:
+                index_queue.prev.next = index_queue.next
+                index_queue.next.prev = index_queue.prev
+                index_queue.next = None
+                index_queue.prev = None
+                self.backupQueue.tail.next = index_queue
+                index_queue.prev = self.backupQueue.tail
+                self.backupQueue.tail = index_queue
+
+            else:
+                index_queue.next.prev = None
+                self.backupQueue.head = index_queue.next
+                index_queue.next = None
+                self.backupQueue.tail.next = index_queue
+                index_queue.prev = self.backupQueue.tail
+                self.backupQueue.tail = index_queue
+            self.queue.head = self.backupQueue.head
+            self.queue.tail = self.backupQueue.tail
+            self.ordenar()
+        else:
+            raise UserNotFound
+
     def ordenar(self):
         self.backupQueue.head = self.queue.head
         self.backupQueue.tail = self.queue.tail
@@ -207,7 +251,7 @@ p1 = Person("Deyson", 18, "Dolor de muela", 4)
 p2 = Person("Nathy", 19, "Dolor de cabeza", 5)
 p3 = Person("Tepho", 20, "Dolor de cabeza", 2)
 p4 = Person("Juli", 20, "Dolor de muela", 1)
-p5 = Person("Sofi", 19, "Dolor de cabeza", 1)  # Revisar caso de orden de llegada
+p5 = Person("Sofi", 19, "Dolor de cabeza", 1)
 p6 = Person("Edison", 18, "Dolor de cabeza", 6)
 p7 = Person("JJ", 18, "Dolor de cabeza", 6)
 
@@ -219,6 +263,9 @@ pq.enqueue(p4)
 pq.enqueue(p5)
 pq.enqueue(p6)
 pq.enqueue(p7)
+
+pq.updatePriority(p5, 1)
+print(pq)
 
 
 
