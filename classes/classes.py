@@ -18,6 +18,30 @@ class Person:
     def __str__(self) -> str:
         return f"Nombre: {self.name}, edad: {self.age}, descripcion: {self.descrip}, nivel de prioridad: {self.plevel}"
 
+    def getName(self):
+        return self.name
+
+    def getAge(self):
+        return self.age
+
+    def getDescrip(self):
+        return self.descrip
+
+    def getPlevel(self):
+        return self.plevel
+
+    def setName(self, name):
+        self.name = name
+
+    def setAge(self, age):
+        self.age = age
+
+    def setDescrip(self, descrip):
+        self.descrip = descrip
+
+    def setPlevel(self, plevel):
+        self.plevel = plevel
+
 
 class Node:
     def __init__(self, value = None, next = None) -> None:
@@ -87,37 +111,46 @@ class DLinkedList:
         self.head = new_node
 
     def delete_at_index(self, index):  # Eliminar nodos en un indice dado
+        return_Node = DNode()
         if index > self.size - 1:
             return
         if index == 0:
+            return_Node = self.head
             self.head = self.head.next
             self.head.prev = None
+            return return_Node
 
         elif index > 0:
             pos = 0
             node = self.head
             if index == self.size - 1:
+                return_Node = self.tail
                 self.tail = self.tail.prev
                 self.tail.next.prev = None
                 self.tail.next = None
+                return return_Node
             else:
                 while pos != index - 1:
                     node = node.next
                     pos += 1
+                return_Node = node
                 aux_node = node.next.next
                 aux_node.prev = node
                 node.next.next = None
                 node.next.prev = None
                 node.next = aux_node
+                return return_Node
 
     def getSize(self):
         return self.size
 
 
 def traverse(node):  # Imprimir la lista
+    cont = 1
     while node is not None:
-        print(node.getValue())
+        print(f"{cont}. ", node.getValue())
         node = node.getNext()
+        cont += 1
 
 
 class PriorityQueue:
@@ -155,44 +188,36 @@ class PriorityQueue:
     def first(self):
         return self.queue.tail
 
-    def updatePriority(self, persona: Person, new_priority):
-        contador = 1
-        found = False
+    def updatePriority(self, paciente: int, new_priority: int):
         index_queue = self.queue.head
         self.backupQueue.head = self.queue.head
         self.backupQueue.tail = self.queue.tail
+        if paciente > self.queue.getSize():
+            print("El valor ingresado sobrepasa el numero de pacientes...")
+        else:
+            for i in range(paciente):
+                index_queue = index_queue.next
 
-        while True:
-            if index_queue.value is persona:
-                found = True
-                persona.plevel = new_priority
-                break
-            elif index_queue.next is None:
-                break
-            index_queue = index_queue.next
-
-        if found is True:
-            if index_queue.prev is not None:
-                index_queue.prev.next = index_queue.next
-                index_queue.next.prev = index_queue.prev
-                index_queue.next = None
-                index_queue.prev = None
-                self.backupQueue.tail.next = index_queue
-                index_queue.prev = self.backupQueue.tail
-                self.backupQueue.tail = index_queue
-
-            else:
+            if index_queue == self.queue.head:
                 index_queue.next.prev = None
                 self.backupQueue.head = index_queue.next
                 index_queue.next = None
-                self.backupQueue.tail.next = index_queue
-                index_queue.prev = self.backupQueue.tail
-                self.backupQueue.tail = index_queue
+            elif index_queue == self.queue.tail:
+                index_queue.prev.next = None
+                self.backupQueue.tail = index_queue.prev
+                index_queue.prev = None
+            else:
+                index_queue.next.prev = index_queue.prev
+                index_queue.prev.next = index_queue.next
+                index_queue.prev = None
+                index_queue.next = None
+                self.enqueue(index_queue.value)
+
             self.queue.head = self.backupQueue.head
             self.queue.tail = self.backupQueue.tail
-            self.ordenar()
-        else:
-            raise UserNotFound
+            index_queue.value.setPlevel(new_priority)
+            self.enqueue(index_queue.value)
+
 
     def ordenar(self):
         self.backupQueue.head = self.queue.head
@@ -251,7 +276,7 @@ p1 = Person("Deyson", 18, "Dolor de muela", 4)
 p2 = Person("Nathy", 19, "Dolor de cabeza", 5)
 p3 = Person("Tepho", 20, "Dolor de cabeza", 2)
 p4 = Person("Juli", 20, "Dolor de muela", 1)
-p5 = Person("Sofi", 19, "Dolor de cabeza", 1)
+p5 = Person("Sofi", 19, "Dolor de cabeza", 3)
 p6 = Person("Edison", 18, "Dolor de cabeza", 6)
 p7 = Person("JJ", 18, "Dolor de cabeza", 6)
 
@@ -263,12 +288,7 @@ pq.enqueue(p4)
 pq.enqueue(p5)
 pq.enqueue(p6)
 pq.enqueue(p7)
-
-pq.updatePriority(p5, 1)
 print(pq)
 
-
-
-
-
-
+pq.updatePriority(0, 1)
+traverse(pq.queue.head)
