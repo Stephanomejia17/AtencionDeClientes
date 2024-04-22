@@ -13,6 +13,7 @@ class Console:
         self.priorityQueue = PriorityQueue()
         self.opcion: Optional[int] = None
 
+
     def menu(self) -> None:
         while True:
             print(self.GUION * 40, "\n")
@@ -64,8 +65,6 @@ class Console:
                 print("Ingrese una nueva opción...")
             time.sleep(3)
             self.opcion = None
-
-
 
     def run(self):
         self.menu()

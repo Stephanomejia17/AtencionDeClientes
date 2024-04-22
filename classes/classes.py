@@ -217,7 +217,6 @@ class PriorityQueue:
             index_queue.value.setPlevel(new_priority)
             self.enqueue(index_queue.value)
 
-
     def ordenar(self):
         self.backupQueue.head = self.queue.head
         self.backupQueue.tail = self.queue.tail
