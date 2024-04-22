@@ -54,7 +54,7 @@ class Console:
                     traverse(self.priorityQueue.queue.head)
                     paciente = int(input("Ingrese el numero de paciente: "))
                     new_priority = int(input("Ingrese la nueva prioridad del paciente: "))
-                    self.priorityQueue.updatePriority(paciente, new_priority)
+                    self.priorityQueue.updatePriority(paciente-1, new_priority)
                     print("Actualizando... Listo!")
                 else:
                     print("No hay pacientes")

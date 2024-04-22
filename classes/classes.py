@@ -2,10 +2,10 @@ class EmptyQueue (Exception):
     def __init__(self, message):
         self.message = message
 
+
 class UserNotFound(Exception):
     def __init__(self, message):
         self.message = message
-
 
 
 class Person:
@@ -211,7 +211,6 @@ class PriorityQueue:
                 index_queue.prev.next = index_queue.next
                 index_queue.prev = None
                 index_queue.next = None
-                self.enqueue(index_queue.value)
 
             self.queue.head = self.backupQueue.head
             self.queue.tail = self.backupQueue.tail
@@ -249,13 +248,16 @@ class PriorityQueue:
                     break
             else:
                 if index_queue.prev is not None:
-                    auxindexprev = index_queue.prev
-                    index_queue.prev.next = self.backupQueue.tail
-                    self.backupQueue.tail.prev = auxindexprev
-                    index_queue.prev = self.backupQueue.tail
-                    index_queue.next = None
-                    self.backupQueue.tail.next = index_queue
-                    self.backupQueue.tail = index_queue
+                    aux_tail = self.backupQueue.tail
+                    self.backupQueue.tail = aux_tail.prev
+                    self.backupQueue.tail.next = None
+                    aux_tail.prev = None
+                    index_queue.prev.next = aux_tail
+                    aux_tail.prev = index_queue.prev
+                    index_queue.prev = aux_tail
+                    aux_tail.next = index_queue
+
+
                     break
                 else:
                     self.backupQueue.tail = self.backupQueue.tail.prev
@@ -271,12 +273,13 @@ class PriorityQueue:
         self.queue.tail = self.backupQueue.tail
 
 
-pq = PriorityQueue()
+# Pruebas
+"""pq = PriorityQueue()
 p1 = Person("Deyson", 18, "Dolor de muela", 4)
 p2 = Person("Nathy", 19, "Dolor de cabeza", 5)
 p3 = Person("Tepho", 20, "Dolor de cabeza", 2)
 p4 = Person("Juli", 20, "Dolor de muela", 1)
-p5 = Person("Sofi", 19, "Dolor de cabeza", 3)
+p5 = Person("Sofi", 19, "Dolor de cabeza", 1)
 p6 = Person("Edison", 18, "Dolor de cabeza", 6)
 p7 = Person("JJ", 18, "Dolor de cabeza", 6)
 
@@ -291,4 +294,4 @@ pq.enqueue(p7)
 print(pq)
 
 pq.updatePriority(0, 1)
-traverse(pq.queue.head)
+traverse(pq.queue.head)"""
