@@ -273,8 +273,8 @@ class PriorityQueue:
         self.queue.tail = self.backupQueue.tail
 
 
-# Pruebas
-"""pq = PriorityQueue()
+"""# Pruebas
+pq = PriorityQueue()
 p1 = Person("Deyson", 18, "Dolor de muela", 4)
 p2 = Person("Nathy", 19, "Dolor de cabeza", 5)
 p3 = Person("Tepho", 20, "Dolor de cabeza", 2)
